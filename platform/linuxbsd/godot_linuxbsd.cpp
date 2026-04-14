@@ -69,24 +69,25 @@ extern "C" const char *pck_section_dummy_call() {
 
 int main(int argc, char *argv[]) {
 #if defined(__x86_64) || defined(__x86_64__)
-	int cpuinfo[4];
-	__cpuid(cpuinfo, 0x01);
+    int cpuinfo[4];
+    __cpuid(cpuinfo, 0x01);
 
-	if (!(cpuinfo[2] & (1 << 20))) {
-		printf("A CPU with SSE4.2 instruction set support is required.\n");
+    // MODIFICADO: Verificar SSE2 (bit 26 en EDX) en lugar de SSE4.2 para compatibilidad con Phenom X4
+    if (!(cpuinfo[3] & (1 << 26))) {
+        printf("A CPU with SSE2 instruction set support is required.\n");
 
-		int ret = system("zenity --warning --title \"Godot Engine\" --text \"A CPU with SSE4.2 instruction set support is required.\" 2> /dev/null");
-		if (ret != 0) {
-			ret = system("kdialog --title \"Godot Engine\" --sorry \"A CPU with SSE4.2 instruction set support is required.\" 2> /dev/null");
-		}
-		if (ret != 0) {
-			ret = system("Xdialog --title \"Godot Engine\" --msgbox \"A CPU with SSE4.2 instruction set support is required.\" 0 0 2> /dev/null");
-		}
-		if (ret != 0) {
-			ret = system("xmessage -center -title \"Godot Engine\" \"A CPU with SSE4.2 instruction set support is required.\" 2> /dev/null");
-		}
-		abort();
-	}
+        int ret = system("zenity --warning --title \"Godot Engine\" --text \"A CPU with SSE2 instruction set support is required.\" 2> /dev/null");
+        if (ret != 0) {
+            ret = system("kdialog --title \"Godot Engine\" --sorry \"A CPU with SSE2 instruction set support is required.\" 2> /dev/null");
+        }
+        if (ret != 0) {
+            ret = system("Xdialog --title \"Godot Engine\" --msgbox \"A CPU with SSE2 instruction set support is required.\" 0 0 2> /dev/null");
+        }
+        if (ret != 0) {
+            ret = system("xmessage -center -title \"Godot Engine\" \"A CPU with SSE2 instruction set support is required.\" 2> /dev/null");
+        }
+        abort();
+    }
 #endif
 
 #if defined(ASAN_ENABLED)
