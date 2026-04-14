@@ -785,10 +785,10 @@ if env["arch"] == "x86_64":
     # AVX and AVX2 aren't enabled because they aren't available on more recent low-end Intel CPUs.
     if env.msvc and not methods.using_clang(env):
         # https://stackoverflow.com/questions/64053597/how-do-i-enable-sse4-1-and-sse3-but-not-avx-in-msvc/69328426
-        env.Append(CCFLAGS=["/d2archSSE42"])
+        env.Append(CCFLAGS=["/arch:SSE2"])  # Cambiado de "/d2archSSE42"
     else:
         # `-msse2` is implied when compiling for x86_64.
-        env.Append(CCFLAGS=["-msse4.2", "-mpopcnt"])
+        env.Append(CCFLAGS=["-msse2"])
 elif env["arch"] == "x86_32":
     # Be more conservative with instruction sets on 32-bit x86 to improve compatibility.
     # SSE and SSE2 are present on all CPUs that support 64-bit, even if running a 32-bit OS.
