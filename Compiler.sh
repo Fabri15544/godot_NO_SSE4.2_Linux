@@ -8,11 +8,22 @@ echo "=========================================="
 echo "  COMPILANDO GODOT"
 echo "=========================================="
 
+# Verificar que Clang está instalado
+if ! command -v clang++ &> /dev/null; then
+    echo "ERROR: clang++ no está instalado"
+    echo "Instálalo con: sudo apt-get install clang lld"
+    exit 1
+fi
+
+echo "Usando compilador: $(clang++ --version | head -1)"
+
+# Configuración común
+export SCONS_FLAGS="platform=linuxbsd arch=x86_64 use_llvm=yes CC=clang CXX=clang++ -j4"
+
 # Compilar el editor
 echo -e "\n[1/2] Compilando el editor..."
-scons platform=linuxbsd target=editor arch=x86_64 use_llvm=yes -j4
+scons target=editor $SCONS_FLAGS
 
-# Verificar si el editor se compiló correctamente
 if [ $? -ne 0 ]; then
     echo "ERROR: Falló la compilación del editor"
     exit 1
@@ -21,9 +32,8 @@ echo "✓ Editor compilado correctamente"
 
 # Compilar la plantilla de exportación
 echo -e "\n[2/2] Compilando plantilla de exportación (template_release)..."
-scons platform=linuxbsd target=template_release arch=x86_64 use_llvm=yes -j4
+scons target=template_release $SCONS_FLAGS
 
-# Verificar si la plantilla se compiló correctamente
 if [ $? -ne 0 ]; then
     echo "ERROR: Falló la compilación de la plantilla"
     exit 1
