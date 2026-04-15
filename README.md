@@ -2,7 +2,7 @@
 
 Grant permissions: `chmod +x Compiler.sh`
 
-To compile Godot, run: `Compiler.sh`
+To compile Godot, run: `./Compiler.sh`
 
 Descargar Template: https://godotengine.org/download/archive/4.5-stable/
 
